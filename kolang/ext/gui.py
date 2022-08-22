@@ -32,7 +32,7 @@ class App(threading.Thread):
 
 
 
-def create_compoenent(유형, 텍스트=None, 커맨드=None):
+def create_component(유형, 텍스트=None, 커맨드=None):
     global c_id
     component = None
     if 유형 == "버튼":

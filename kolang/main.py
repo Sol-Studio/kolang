@@ -35,7 +35,7 @@ funcDB = {
     "gui.창생성": "kolang.ext.gui.create_window",
     "gui.창.크기위치수정": "kolang.ext.gui.set_window_geometry",
     "gui.요소.텍스트수정": "kolang.ext.gui.edit_label",
-    "gui.요소추가": "kolang.ext.gui.create_compoenent",
+    "gui.요소추가": "kolang.ext.gui.create_component",
     "gui.요소삭제": "kolang.ext.gui.delete_component",
 
     # time 확장기능
