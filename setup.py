@@ -19,8 +19,8 @@ setup(
                   'kolang=kolang.main:main',
             ],
       },
-      python_requires='==3.8',
-      license='GPL-2.0',
+      python_requires='>=3.8',
+      license='GPLv2',
       classifiers=[
             'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
             'Programming Language :: Python',
