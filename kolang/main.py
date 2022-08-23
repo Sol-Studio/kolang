@@ -1,6 +1,6 @@
 import re, sys, os, getopt
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
-__version = open(os.path.join(BASE_DIR, "version.txt"), "r", encoding="utf-8").read()
+__version = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "version.txt"), "r", encoding="utf-8").read()
+
 
 class RePreset:
     """
@@ -16,6 +16,8 @@ class RePreset:
     define_func = r"함수 이름:([^ ]+)(, 매개변수:(.+))?(을|를) 정의하겠다"
     use_extension = r"확장기능 (.+)(을|를) 사용하겠다"
 
+
+# 코랭 - python
 funcDB = {
     # 기본
     "출력":"print",
@@ -39,7 +41,8 @@ funcDB = {
     "gui.요소삭제": "kolang.ext.gui.delete_component",
 
     # time 확장기능
-    "시간.기다리기": "kolang.ext.time.sleep"
+    "시간.기다리기": "kolang.ext.time.sleep",
+    "시간.지금시간구하기": "kolang.ext.time.getTimeString"
 }
 keywordDB = {
     "계속": "continue",
@@ -53,22 +56,28 @@ extDB = {
     "시간": "time"
 }
 
+
 def convertLn(string:str) -> str:
     """
     한 줄의 sol코드를 파이썬 코드로 변환하여 반환합니다.
     string : 변환할 한 줄의 코드
     """
+
     compiled = ""
     funcName = ""
     param = ""
     tab_stack = 0
+
+    # 탭 (\t)가 몇번 들어있는지 확인
     while string.startswith("    "):
         string = string[4:]
         tab_stack += 1
 
+    # 주석 처리
     if string.startswith("#"):
         return tab_stack*"\t" + string
 
+    # 빈 줄인지 확인
     if string == "":
         return tab_stack*"\t"
 
@@ -117,20 +126,15 @@ def convertLn(string:str) -> str:
         else:
             return "\t"*tab_stack + "for i in " + repeat[0] + ":"
 
-
+    # 함수 정의
     define_func = re.fullmatch(RePreset.define_func, string)
     if define_func != None:
-        def xstr(s):
-            if s is None:
-                return ''
-            return str(s)
-        
         return "    "*tab_stack + "def " + define_func.group(1) + "(" + (lambda s: s if (s is not None) else "")(define_func.group(3)) + "):"
 
     # 함수
-    func = re.search(RePreset.function, string)
-    if func:
-        funcName = func.groups()[0].split(" ")[-1]
+    funcMatch = re.search(RePreset.function, string)
+    if funcMatch:
+        funcName = funcMatch.groups()[0].split(" ")[-1]
         if funcName in funcDB.keys():
             funcName = funcDB[funcName]
 
@@ -149,16 +153,23 @@ def convertLn(string:str) -> str:
 
     return "    "*tab_stack + compiled
 
+
 def convertFile(inFilePath:str, outFileDir:str) -> str:
     """
     .sol 파일을 파이썬 파일로 변환하고 그 경로를 반환합니다.
     inFilePath : 변환할 파일의 경로
     """
+    # inFilePath이 존재하지 않으면 오류 발생
     if not os.path.exists(inFilePath):
         raise FileNotFoundError("파일 \"%s\"가 존재하지 않습니다" % inFilePath)
+
+    # outFileDir이 존재하지 않으면 만들기
     if not os.path.exists(outFileDir):
         os.makedirs(outFileDir, exist_ok=True)
+
+    # 코랭 코드 불러오기
     strings = open(inFilePath, "r", encoding="utf-8").read().split("\n")
+
     converted = ""
     for s in strings:
         converted += convertLn(s) + "\n"
@@ -166,55 +177,63 @@ def convertFile(inFilePath:str, outFileDir:str) -> str:
     open(outFilePath, "w", encoding="utf-8").write("import kolang\n"+converted)
     return outFilePath
 
+
+# 콘솔 명령어 처리
 def main():
     if len(sys.argv) < 2:
-        print("도움말을 보려면 \"kolang help\"를 입력하세요")
+        print("안녕하세요! 코랭이에요!")
         return
     try:
-        opts, args = getopt.getopt(sys.argv[2:], "i:o:h", ["run", "input=", "help", "output="])
+        opts, args = getopt.getopt(sys.argv[1:], "vho:", ["version", "help", "output="])
         
     except getopt.GetoptError as err:
-        print("알맞지 않은 옵션 형식입니다. 도움말을 보려면 \"kolang help\"를 입력하세요")
+        print("알맞지 않은 옵션 형식입니다. 도움말을 보려면 \"kolang --help\"를 입력하세요")
         return
     
     inFilePath = ""
     outFileDir = "dist"
-    command = sys.argv[1]
+    
     for opt,arg in opts:
         if opt == "-o" or opt == "--output":
             outFileDir = arg
-        elif opt == "-i" or opt == "--input":
-            inFilePath = arg
+
+        elif opt == "-v" or opt == "--version":
+            print("코랭 버전 : %s\n파이썬 버전 : %d.%d.%d" % (__version, sys.version_info.major, sys.version_info.minor, sys.version_info.micro))
+            return
+
+        elif opt == "-h" or opt == "--help":
+            print("""
+    kolang [run|convert] [파일경로] -o(선택사항) [변환된 파일이 저장될 폴더(default:/.dist)] : 코랭 코드를 실행하거나 파이썬 파일로 변환합니다
+    kolang --help(-h) : 도움말
+    kolang --version(-v) : 코랭과 파이썬의 버전을 확인합니다
+            """)
+            return
 
         else:
-            print(opt + "은(는) 알 수 없는 옵션입니다. 도움말을 보려면 \"kolang help\"를 입력하세요")
-    if command == "help":
-        print("""
-    kolang [run|convert] -i [파일경로] (-o [변환된 파일이 저장될 폴더]) : 코랭 코드를 실행하거나 파이썬 파일로 변환합니다
-    kolang help : 도움말
-    kolang version : 코랭과 파이썬의 버전을 확인합니다
-        """)
+            print(opt + "은(는) 알 수 없는 옵션입니다. 도움말을 보려면 \"kolang --help\"를 입력하세요")
 
-    elif command == "version":
-        print("코랭 버전 : %s\n파이썬 버전 : %d.%d.%d" % (__version, sys.version_info.major, sys.version_info.minor, sys.version_info.micro))
 
-    elif command == "run":
-        if inFilePath == "":
-            print("변환할 파일 옵션이 빠져있습니다. 도움말을 보려면 \"kolang help\"를 입력하세요")
+    command = sys.argv[1]
+    if command == "run":
+        if len(sys.argv) < 3:
+            print("변환할 파일 옵션이 빠져있습니다. 도움말을 보려면 \"kolang --help\"를 입력하세요")
             return
+        inFilePath = sys.argv[2]
         os.system("python " + convertFile(inFilePath, outFileDir))
 
 
     elif command == "convert":
-        if inFilePath == "":
-            print("변환할 파일 옵션이 빠져있습니다. 도움말을 보려면 \"kolang help\"를 입력하세요")
+        if len(sys.argv) < 3:
+            print("변환할 파일 옵션이 빠져있습니다. 도움말을 보려면 \"kolang --help\"를 입력하세요")
             return
+        inFilePath = sys.argv[2]
         convertFile(inFilePath, outFileDir)
         print("코랭 코드 '%s'를 '%s'로 변환하였습니다." % (sys.argv[2], filename))
 
 
     else:
-        print(command + "은(는) 알 수 없는 명령어입니다. 도움말을 보려면 \"kolang help\"를 입력하세요")
+        print(command + "은(는) 알 수 없는 명령어입니다. 도움말을 보려면 \"kolang --help\"를 입력하세요")
+
 
 if __name__ == "__main__":
     main()
