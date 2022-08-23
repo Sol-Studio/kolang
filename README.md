@@ -19,7 +19,7 @@ $ pip install kolang
 ```
 3. 코랭으로 코드 실행하기
 ```
-$ kolang run myCode.sol
+$ kolang run -i myCode.sol
 ```
 
 ## 🏆기여자 목록
