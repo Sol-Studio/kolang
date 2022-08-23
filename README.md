@@ -3,7 +3,7 @@
 한글로 하는 코딩
 <br>
 <a href="https://pypi.org/project/kolang/"><img src="https://img.shields.io/pypi/v/kolang?color=green" alt="PyPI Version"></a>
-<a href="https://pypi.org/project/kolang/"><img src="https://img.shields.io/pypi/pyversions/kolang" alt="Python Version"></a>
+<a href="https://sktelecom.github.io/guide/use/obligation/gpl-2.0/"><img src="https://img.shields.io/pypi/l/kolang" alt="License"></a>
 <a href="https://discord.gg/auytc6qS83"><img src="https://img.shields.io/discord/851458756532895769?label=discord" alt="Discord"></a>
 </div>
 
@@ -22,10 +22,13 @@ $ pip install kolang
 $ kolang run -i myCode.sol
 ```
 
-## 🏆기여자 목록
+## 🏆기여자
+
  - [그저 사람](https://github.com/Sol-Studio)
  - [5-23](https://github.com/5-23)
  
+ ## 💖후원자
+ [정보](https://www.notion.so/0e02b8cef9a64d08a39eaeec6d4baf0b)
  
 ## 🔗관련 링크
 [문서](https://amused-advantage-102.notion.site/0e02b8cef9a64d08a39eaeec6d4baf0b)
