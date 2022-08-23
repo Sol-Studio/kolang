@@ -8,7 +8,7 @@
 </div>
 
 ## ✨빠른 시작
-파이썬 버전은 꼭! 3.8.7로 설치해주세요!! 다른 버전에서는 작동하지 않습니다!<br>
+파이썬 버전은 꼭! 3.8 이상으로 설치해주세요!! 구버전에서는 작동하지 않습니다!<br>
 1. pip로 코랭 설치하기
 ```
 $ pip install kolang
@@ -19,7 +19,7 @@ $ pip install kolang
 ```
 3. 코랭으로 코드 실행하기
 ```
-$ kolang run -i myCode.sol
+$ kolang run myCode.sol
 ```
 
 ## 🏆기여자
