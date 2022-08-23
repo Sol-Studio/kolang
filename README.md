@@ -3,7 +3,8 @@
 한글로 하는 코딩
 <br>
 <a href="https://pypi.org/project/kolang/"><img src="https://img.shields.io/pypi/v/kolang?color=green" alt="PyPI Version"></a>
-<a href="https://pypi.org/project/kolang/"><img src="https://img.shields.io/pypi/pyversions/kolang" alt="PyPI Version"></a>
+<a href="https://pypi.org/project/kolang/"><img src="https://img.shields.io/pypi/pyversions/kolang" alt="Python Version"></a>
+<a href="https://discord.gg/auytc6qS83"><img src="https://img.shields.io/discord/851458756532895769?label=discord" alt="Discord"></a>
 </div>
 
 ## ✨빠른 시작
