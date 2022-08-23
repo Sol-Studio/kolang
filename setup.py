@@ -10,7 +10,7 @@ setup(
       author_email='dev.sol.studio@gmail.com', # 작성자 이메일
       description='코랭!', # 간단한 설명
       packages=find_packages(exclude=['']),
-      keywords=[],
+      keywords=["korean"],
       long_description=open('README.md', encoding="utf-8").read(),
       install_requires=[],
       package_data={'': ['*.txt']},
@@ -19,5 +19,12 @@ setup(
                   'kolang=kolang.main:main',
             ],
       },
-      python_requires='==3.8.7',
+      python_requires='==3.8',
+      license='GPL-2.0',
+      classifiers=[
+            'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
+            'Programming Language :: Python',
+            'Programming Language :: Python :: 3',
+            'Programming Language :: Python :: 3.8'
+      ]
 )
